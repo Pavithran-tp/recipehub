@@ -63,7 +63,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Name of the ingredient.', max_length=100)),
+<<<<<<< HEAD
                 ('quantity', models.DecimalField(decimal_places=2, help_text='Quantity of the ingredient required for the recipe.', max_digits=10)),
+=======
+                ('quantity', models.FloatField(help_text='Quantity of the ingredient required for the recipe.')),
+>>>>>>> 8b35b43 (Add models and initial migration)
                 ('unit', models.CharField(choices=[('g', 'Grams'), ('kg', 'Kilograms'), ('ml', 'Milliliters'), ('l', 'Liters'), ('tsp', 'Teaspoon'), ('tbsp', 'Tablespoon'), ('cup', 'Cup'), ('pcs', 'Pieces')], help_text='Measurement unit for the ingredient.', max_length=10)),
                 ('optional', models.BooleanField(default=False, help_text='Check if the ingredient is optional.')),
                 ('recipe', models.ForeignKey(help_text='The recipe to which this ingredient belongs.', on_delete=django.db.models.deletion.CASCADE, related_name='ingredients', to='recipes.recipe')),
