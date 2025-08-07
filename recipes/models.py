@@ -23,6 +23,17 @@ class CuisineType(models.TextChoices):
     MEXICAN = 'mexican', 'Mexican'
     OTHER = 'other', 'Other'
 
+class Unit(models.TextChoices):
+    GRAMS = 'g', 'Grams'
+    KILOGRAMS = 'kg', 'Kilograms'
+    MILLILITERS = 'ml', 'Milliliters'
+    LITERS = 'l', 'Liters'
+    TEASPOON = 'tsp', 'Teaspoon'
+    TABLESPOON = 'tbsp', 'Tablespoon'
+    CUP = 'cup', 'Cup'
+    PIECES = 'pcs', 'Pieces'
+
+
 
 class User(AbstractUser):
     """
@@ -110,15 +121,6 @@ class Ingredient(models.Model):
     Model representing an ingredient used in a recipe.
     Stores the name, quantity, unit, and whether it's optional.
     """
-    class Unit(models.TextChoices):
-        GRAMS = 'g', 'Grams'
-        KILOGRAMS = 'kg', 'Kilograms'
-        MILLILITERS = 'ml', 'Milliliters'
-        LITERS = 'l', 'Liters'
-        TEASPOON = 'tsp', 'Teaspoon'
-        TABLESPOON = 'tbsp', 'Tablespoon'
-        CUP = 'cup', 'Cup'
-        PIECES = 'pcs', 'Pieces'
 
     name = models.CharField(
         max_length=100,
@@ -130,9 +132,9 @@ class Ingredient(models.Model):
     help_text="Quantity of the ingredient required for the recipe."
 )
     unit = models.CharField(
-        max_length=10,
-        choices=Unit.choices,
-        help_text="Measurement unit for the ingredient."
+    max_length=10,
+    choices=Unit.choices,
+    help_text="Measurement unit for the ingredient."
     )
     optional = models.BooleanField(
         default=False,
