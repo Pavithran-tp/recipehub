@@ -124,9 +124,11 @@ class Ingredient(models.Model):
         max_length=100,
         help_text="Name of the ingredient."
     )
-    quantity = models.FloatField(
-        help_text="Quantity of the ingredient required for the recipe."
-    )
+    quantity = models.DecimalField(
+    max_digits=10,
+    decimal_places=2,
+    help_text="Quantity of the ingredient required for the recipe."
+)
     unit = models.CharField(
         max_length=10,
         choices=Unit.choices,
