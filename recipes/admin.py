@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User,Recipe, Collection, Ingredient  # Add your models here
+from django.contrib.auth.admin import UserAdmin
+from .models import User,Recipe, Collection, Ingredient  
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('title', 'cuisine', 'difficulty', 'veg_type', 'author', 'created_at')
@@ -15,7 +16,13 @@ class CollectionAdmin(admin.ModelAdmin):
     search_fields = ('name', 'user__username')
     filter_horizontal = ('recipes',)
 
-admin.site.register(User)
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Custom Profile', {'fields': ('is_chef', 'bio')}),
+    )
+    list_display = list(UserAdmin.list_display) + ['is_chef']
+
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Collection, CollectionAdmin)
