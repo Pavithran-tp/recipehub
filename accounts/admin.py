@@ -9,5 +9,5 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Custom Profile', {'fields': ('is_chef', 'bio')}),
     )
-
+    list_display = UserAdmin.list_display + ('is_chef')
 admin.site.register(User, CustomUserAdmin)
