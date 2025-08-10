@@ -11,7 +11,7 @@
         <div class="nav-container">
             <!-- Left side: Logo -->
             <div class="nav-left">
-                <h1><a href="/" style="color:whitesmoke">RecipeHub</a></h1>
+                <h1><a href="/">RecipeHub</a></h1>
             </div>
 
             <!-- Right side: Auth links or dropdown -->
@@ -20,9 +20,9 @@
                     <div class="dropdown">
                         <button class="dropbtn">{{ user.username }} ⏷</button>
                         <div class="dropdown-content">
-                            <a href="#">Profile</a>
-                            <a href="#">Change Password</a>
-                            <form action="{% url 'logout' %}" method="post" style="margin:0;padding:0;">
+                              <!-- <a href="#">Profile</a> -->
+                                <!-- <a href="#">Change Password</a> -->
+                            <form action="{% url 'logout' %}" method="post" class="logout-form"></form>
                                 {% csrf_token %}
                                 <button type="submit">Logout</button>
                             </form>
@@ -30,8 +30,8 @@
                     </div>
                 {% else %}
                     <div class="auth-links">
-                        <a href="{% url 'signup' %}" style="color : whitesmoke">Signup</a>
-                        <a href="{% url 'login' %}" style="color: whitesmoke;">Login</a>
+                        <a href="{% url 'signup' %}">Signup</a>
+                        <a href="{% url 'login' %}">Login</a>
                     </div>
                 {% endif %}
             </div>

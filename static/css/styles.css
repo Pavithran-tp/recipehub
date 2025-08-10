@@ -29,7 +29,7 @@ header a {
 .nav-left h1 a {
     font-size: 2rem;
     font-weight: bold;
-    color: #ffdd57 !important; /* Bright gold */
+    color: #ffdd57;/* Bright gold */
     transition: color 0.3s ease;
 }
 
