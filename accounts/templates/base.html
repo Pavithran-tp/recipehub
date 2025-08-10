@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RecipeHub{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <!-- Left side: Logo -->
+            <div class="nav-left">
+                <h1><a href="/" style="color:whitesmoke">RecipeHub</a></h1>
+            </div>
+
+            <!-- Right side: Auth links or dropdown -->
+            <div class="nav-right">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="dropbtn">{{ user.username }} ⏷</button>
+                        <div class="dropdown-content">
+                            <a href="#">Profile</a>
+                            <a href="#">Change Password</a>
+                            <form action="{% url 'logout' %}" method="post" style="margin:0;padding:0;">
+                                {% csrf_token %}
+                                <button type="submit">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="auth-links">
+                        <a href="{% url 'signup' %}" style="color : whitesmoke">Signup</a>
+                        <a href="{% url 'login' %}" style="color: whitesmoke;">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        &copy; 2025 RecipeHub. All rights reserved.
+    </footer>
+</body>
+</html>
