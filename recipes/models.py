@@ -75,6 +75,28 @@ class Recipe(models.Model):
         related_name='recipes',
         help_text="The user who created this recipe."
     )
+    image = models.ImageField(upload_to='recipes/', blank=True, null=True)
+    instructions = models.TextField(
+        default="No instructions provided.",
+        help_text="Step-by-step preparation instructions."
+    )
+    prep_time = models.PositiveIntegerField(
+        default=0,
+        help_text="Preparation time in minutes."
+    )
+    total_time = models.PositiveIntegerField(
+        default=0,
+        help_text="Total time in minutes."
+    )
+    servings = models.PositiveIntegerField(
+        default=1,
+        help_text="Number of servings."
+    )
+    calories = models.PositiveIntegerField(
+        default=0,
+        help_text="Calories per serving."
+    )
+
 
     def __str__(self):
         return self.title

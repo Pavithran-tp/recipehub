@@ -1,8 +1,39 @@
 {% extends 'base.html' %}
-
-{% block title %}Home{% endblock %}
+{% block title %}All Recipes{% endblock %}
 
 {% block content %}
-<h1>Welcome to RecipeHub 🍽️</h1>
-<p>This is the home page. You can explore recipes, login, or sign up.</p>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-green-700">All Recipes</h1>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'recipe_create' %}" 
+         class="bg-green-600 text-white font-bold px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">
+        + Create Recipe
+      </a>
+    {% endif %}
+  </div>
+
+  {% if recipes %}
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      {% for recipe in recipes %}
+        <div class="border border-gray-300 rounded-lg p-4 shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
+          <a href="{% url 'recipe_detail' recipe.id %}">
+            {% if recipe.image %}
+              <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" 
+                   class="w-full h-44 object-cover rounded-md mb-3" />
+            {% else %}
+              <div class="w-full h-44 bg-gray-200 text-gray-400 font-semibold flex items-center justify-center rounded-md mb-3">
+                No Image
+              </div>
+            {% endif %}
+            <h2 class="text-lg font-semibold text-green-700 hover:text-green-900">
+              {{ recipe.title }}
+            </h2>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No recipes found.</p>
+  {% endif %}
 {% endblock %}

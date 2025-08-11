@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib.auth import login
+from django.views.generic import FormView
 from .forms import CustomUserCreationForm
 
-def signup_view(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)  # optional: auto-login after signup
-            return redirect('home')  # redirect to home or dashboard
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+class SignupView(FormView):
+    template_name = 'registration/signup.html'
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)

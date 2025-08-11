@@ -4,47 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}RecipeHub{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body>
-    <header>
-        <div class="nav-container">
-            <!-- Left side: Logo -->
-            <div class="nav-left">
-                <h1><a href="/">RecipeHub</a></h1>
-            </div>
+<body class="bg-gray-100 text-gray-800 min-h-screen font-sans leading-relaxed">
 
-            <!-- Right side: Auth links or dropdown -->
-            <div class="nav-right">
-                {% if user.is_authenticated %}
-                    <div class="dropdown">
-                        <button class="dropbtn">{{ user.username }} ⏷</button>
-                        <div class="dropdown-content">
-                              <!-- <a href="#">Profile</a> -->
-                                <!-- <a href="#">Change Password</a> -->
-                            <form action="{% url 'logout' %}" method="post" class="logout-form"></form>
-                                {% csrf_token %}
-                                <button type="submit">Logout</button>
-                            </form>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="auth-links">
-                        <a href="{% url 'signup' %}">Signup</a>
-                        <a href="{% url 'login' %}">Login</a>
-                    </div>
-                {% endif %}
-            </div>
+<header class="bg-green-800 px-8 py-4 shadow-md">
+  <div class="flex justify-between items-center max-w-7xl mx-auto">
+    <div class="nav-left">
+      <h1>
+        <a href="/" class="text-yellow-400 text-2xl font-bold hover:text-yellow-300 transition-colors duration-300">
+          RecipeHub
+        </a>
+      </h1>
+    </div>
+
+    <div class="nav-right">
+      {% if user.is_authenticated %}
+        <div class="relative inline-block">
+          <button
+            class="text-green-100 font-medium text-sm px-3 py-2 bg-transparent border-none cursor-pointer hover:text-green-200 transition-colors duration-300">
+            {{ user.username }} ⏷
+          </button>
+          <div
+            class="hidden absolute bg-white min-w-[140px] shadow-lg z-10 right-0 mt-2 rounded"
+            id="dropdown-menu"
+          >
+            <form action="{% url 'logout' %}" method="post" class="w-full">
+              {% csrf_token %}
+              <button type="submit" 
+                class="block w-full text-left px-4 py-2 text-black hover:bg-gray-100 cursor-pointer font-sans text-sm border-none">
+                Logout
+              </button>
+            </form>
+          </div>
         </div>
-    </header>
+        <script>
+          // Simple dropdown toggle using vanilla JS
+          document.querySelector('button').addEventListener('click', function() {
+            document.getElementById('dropdown-menu').classList.toggle('hidden');
+          });
+        </script>
+      {% else %}
+        <div class="flex gap-4">
+          <a href="{% url 'signup' %}" class="text-green-100 font-medium hover:text-green-200 transition-colors duration-300">Signup</a>
+          <a href="{% url 'login' %}" class="text-green-100 font-medium hover:text-green-200 transition-colors duration-300">Login</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<main class="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 mt-8">
+  {% block content %}
+  {% endblock %}
+</main>
 
-    <footer>
-        &copy; 2025 RecipeHub. All rights reserved.
-    </footer>
+<footer class="bg-gray-200 text-gray-600 text-center py-4 mt-16 border-t border-gray-300 text-sm">
+  &copy; 2025 RecipeHub. All rights reserved.
+</footer>
+
 </body>
+
 </html>
