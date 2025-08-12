@@ -16,9 +16,6 @@ class User(AbstractUser):
         null=True,
         help_text="Short biography or introduction about the user."
     )
-    
-    # The following fields are redefined to avoid reverse accessor clashes
-    # with the default auth.User model.
     groups = models.ManyToManyField(
         Group,
         related_name='custom_user_set',
