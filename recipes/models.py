@@ -1,9 +1,7 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-# Class-based choices
 class VegType(models.TextChoices):
     VEGETARIAN = 'veg', 'Vegetarian'
     NON_VEGETARIAN = 'non_veg', 'Non-Vegetarian'
@@ -23,6 +21,7 @@ class CuisineType(models.TextChoices):
     MEXICAN = 'mexican', 'Mexican'
     OTHER = 'other', 'Other'
 
+
 class Unit(models.TextChoices):
     GRAMS = 'g', 'Grams'
     KILOGRAMS = 'kg', 'Kilograms'
@@ -37,14 +36,21 @@ class Unit(models.TextChoices):
 class Recipe(models.Model):
     """
     Model representing a recipe created by a user.
-    Includes details like title, cuisine type, difficulty, and vegetarian option.
+    Includes details like title, cuisine type, difficulty, vegetarian option,
+    and new fields for images, instructions, and time estimates.
     """
     title = models.CharField(
         max_length=100,
         help_text="Enter the title of the recipe."
     )
-    description = models.TextField(
-        help_text="Provide a short description of the recipe."
+    instructions = models.TextField(
+        help_text="Provide step-by-step instructions for the recipe."
+    )
+    image = models.ImageField(
+        upload_to='recipe_images/',
+        blank=True,
+        null=True,
+        help_text="Upload an image for the recipe."
     )
     cuisine = models.CharField(
         max_length=20,
@@ -60,6 +66,21 @@ class Recipe(models.Model):
         max_length=10,
         choices=VegType.choices,
         help_text="Choose the vegetarian type of the recipe (veg, non-veg, vegan)."
+    )
+    prep_time = models.PositiveIntegerField(
+        help_text="Preparation time in minutes."
+    )
+    total_time = models.PositiveIntegerField(
+        help_text="Total time to complete the recipe in minutes."
+    )
+    calories = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Estimated calories per serving."
+    )
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Designates whether this recipe is featured (managed by an admin)."
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -84,21 +105,29 @@ class Ingredient(models.Model):
     """
     Model representing an ingredient used in a recipe.
     Stores the name, quantity, unit, and whether it's optional.
+    The unit field is now optional to allow for custom units.
     """
-
     name = models.CharField(
         max_length=100,
         help_text="Name of the ingredient."
     )
     quantity = models.DecimalField(
-    max_digits=10,
-    decimal_places=2,
-    help_text="Quantity of the ingredient required for the recipe."
+        max_digits=10,
+        decimal_places=2,
+        help_text="Quantity of the ingredient required for the recipe."
     )
     unit = models.CharField(
-    max_length=10,
-    choices=Unit.choices,
-    help_text="Measurement unit for the ingredient."
+        max_length=10,
+        choices=Unit.choices,
+        blank=True,
+        null=True,
+        help_text="Measurement unit for the ingredient from a predefined list."
+    )
+    custom_unit = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="A custom unit if not in the predefined list."
     )
     optional = models.BooleanField(
         default=False,
@@ -112,7 +141,7 @@ class Ingredient(models.Model):
     )
 
     def __str__(self):
-        return f"{self.quantity} {self.get_unit_display()} {self.name}"
+        return f"{self.quantity} {self.get_unit_display() or self.custom_unit} {self.name}"
 
 
 class Collection(models.Model):
@@ -138,3 +167,4 @@ class Collection(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.user.username})"
+
