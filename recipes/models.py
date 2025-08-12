@@ -44,7 +44,8 @@ class Recipe(models.Model):
         help_text="Enter the title of the recipe."
     )
     instructions = models.TextField(
-        help_text="Provide step-by-step instructions for the recipe."
+        help_text="Provide step-by-step instructions for the recipe.",
+        default=''
     )
     image = models.ImageField(
         upload_to='recipe_images/',
@@ -68,10 +69,12 @@ class Recipe(models.Model):
         help_text="Choose the vegetarian type of the recipe (veg, non-veg, vegan)."
     )
     prep_time = models.PositiveIntegerField(
-        help_text="Preparation time in minutes."
+        help_text="Preparation time in minutes.",
+        default=0
     )
     total_time = models.PositiveIntegerField(
-        help_text="Total time to complete the recipe in minutes."
+        help_text="Total time to complete the recipe in minutes.",
+        default=0
     )
     calories = models.PositiveIntegerField(
         blank=True,
