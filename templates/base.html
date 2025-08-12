@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% load static %}
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-green-700 text-white px-6 py-4 flex justify-between">
+        <a href="{% url 'home' %}" class="text-xl font-bold">RecipeHub</a>
+
+        <div class="relative">
+            {% if user.is_authenticated %}
+                <button id="userMenuBtn" class="hover:underline">
+                    {{ user.username }}
+                </button>
+                <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden">
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class = "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="hover:underline mr-4">Login</a>
+                <a href="{% url 'signup' %}" class="hover:underline">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const btn = document.getElementById("userMenuBtn");
+            const menu = document.getElementById("userMenu");
+
+            if (btn) {
+                btn.addEventListener("click", () => {
+                    menu.classList.toggle("hidden");
+                });
+                document.addEventListener("click", (event) => {
+                    if (!btn.contains(event.target) && !menu.contains(event.target)) {
+                        menu.classList.add("hidden");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
