@@ -6,40 +6,30 @@
     
     <form method="post" class="space-y-4">
         {% csrf_token %}
-
-        <!-- Username -->
         <div>
             <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
                 Username
             </label>
             {{ form.username|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
         </div>
-
-        <!-- Password -->
         <div>
             <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
                 Password
             </label>
             {{ form.password1|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
         </div>
-
-        <!-- Confirm Password -->
         <div>
             <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">
                 Confirm Password
             </label>
             {{ form.password2|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
         </div>
-
-        <!-- Is Chef Checkbox -->
         <div class="flex items-center">
             {{ form.is_chef }}
             <label for="{{ form.is_chef.id_for_label }}" class="ml-2 text-gray-700">
                 {{ form.is_chef.label }}
             </label>
         </div>
-
-        <!-- Submit Button -->
         <div>
             <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition">
                 Create Account
