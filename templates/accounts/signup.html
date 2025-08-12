@@ -1,45 +1,53 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
-{% block content %}
-<div class="max-w-md mx-auto mt-20 p-8 bg-white rounded-xl shadow-lg">
-    <h1 class="text-2xl font-bold text-center text-green-700 mb-6">Sign Up</h1>
-    
-    <form method="post" class="space-y-4">
-        {% csrf_token %}
-        <div>
-            <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                Username
-            </label>
-            {{ form.username|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
-        </div>
-        <div>
-            <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                Password
-            </label>
-            {{ form.password1|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
-        </div>
-        <div>
-            <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                Confirm Password
-            </label>
-            {{ form.password2|add_class:"w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" }}
-        </div>
-        <div class="flex items-center">
-            {{ form.is_chef }}
-            <label for="{{ form.is_chef.id_for_label }}" class="ml-2 text-gray-700">
-                {{ form.is_chef.label }}
-            </label>
-        </div>
-        <div>
-            <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition">
-                Create Account
-            </button>
-        </div>
 
-        <p class="text-center text-sm text-gray-600">
-            Already have an account? 
-            <a href="{% url 'login' %}" class="text-green-700 hover:underline">Log in</a>
-        </p>
-    </form>
+{% block content %}
+<div class="max-w-md mx-auto mt-20 p-8 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-center text-green-700 mb-6">Sign Up</h1>
+  
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    <div>
+      <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
+        Username
+      </label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    
+    <div>
+      <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
+        Password
+      </label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+    </div>
+    
+    <div>
+      <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">
+        Confirm Password
+      </label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </div>
+
+    <div class="flex items-center">
+      {{ form.is_chef }}
+      <label for="{{ form.is_chef.id_for_label }}" class="ml-2 text-gray-700">
+        {{ form.is_chef.label }}
+      </label>
+      {{ form.is_chef.errors }}
+    </div>
+
+    <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800 transition">
+      Create Account
+    </button>
+  </form>
+
+  <p class="text-center text-sm text-gray-600 mt-4">
+    Already have an account? 
+    <a href="{% url 'login' %}" class="text-green-700 hover:underline">Log in</a>
+  </p>
 </div>
 {% endblock %}

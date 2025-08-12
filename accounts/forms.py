@@ -6,27 +6,9 @@ class CustomUserCreationForm(UserCreationForm):
     is_chef = forms.BooleanField(
         required=False,
         label="I am a chef (can create recipes)",
-        widget=forms.CheckboxInput(
-            attrs={
-                "class": "h-4 w-4 text-green-600 border-gray-300 rounded"
-            }
-        )
+        widget=forms.CheckboxInput()  
     )
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = UserCreationForm.Meta.fields + ('is_chef',)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({
-            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500',
-            'placeholder': 'Enter your username'
-        })
-        self.fields['password1'].widget.attrs.update({
-            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500',
-            'placeholder': 'Enter password'
-        })
-        self.fields['password2'].widget.attrs.update({
-            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500',
-            'placeholder': 'Confirm password'
-        })
