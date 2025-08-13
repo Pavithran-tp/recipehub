@@ -81,10 +81,6 @@ class Recipe(models.Model):
         null=True,
         help_text="Estimated calories per serving."
     )
-    is_featured = models.BooleanField(
-        default=False,
-        help_text="Designates whether this recipe is featured (managed by an admin)."
-    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         help_text="The date and time when the recipe was created."
@@ -125,12 +121,6 @@ class Ingredient(models.Model):
         blank=True,
         null=True,
         help_text="Measurement unit for the ingredient from a predefined list."
-    )
-    custom_unit = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-        help_text="A custom unit if not in the predefined list."
     )
     optional = models.BooleanField(
         default=False,
