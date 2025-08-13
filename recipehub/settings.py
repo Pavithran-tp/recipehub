@@ -119,3 +119,8 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = 'recipes:home'
 LOGOUT_REDIRECT_URL = 'recipes:home'
 LOGIN_URL = "login"
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
