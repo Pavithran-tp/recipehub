@@ -14,7 +14,7 @@
                 <label for="id_cuisine" class="block text-sm font-medium text-gray-700 mb-1">Cuisine</label>
                 <select name="cuisine" id="id_cuisine" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="">All</option>
-                    {% for value, label in recipe.cuisine.field.choices %}
+                    {% for value, label in cuisine_choices %}
                         <option value="{{ value }}" {% if current_filters.cuisine == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
@@ -23,7 +23,7 @@
                 <label for="id_difficulty" class="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
                 <select name="difficulty" id="id_difficulty" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="">All</option>
-                    {% for value, label in recipe.difficulty.field.choices %}
+                    {% for value, label in difficulty_choices %}
                         <option value="{{ value }}" {% if current_filters.difficulty == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
@@ -32,7 +32,7 @@
                 <label for="id_veg_type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select name="veg_type" id="id_veg_type" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="">All</option>
-                    {% for value, label in recipe.veg_type.field.choices %}
+                    {% for value, label in veg_type_choices %}
                         <option value="{{ value }}" {% if current_filters.veg_type == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
@@ -56,7 +56,7 @@
                     <p class="text-sm text-gray-600">By {{ recipe.author.username }}</p>
                     <p class="text-sm text-gray-500 mt-1">Difficulty: <span class="font-medium text-gray-700">{{ recipe.get_difficulty_display }}</span></p>
                     <div class="mt-4">
-                        <a href="{% url 'recipes:recipe-detail' recipe.pk %}" class="inline-block bg-indigo-600 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-indigo-700 transition-colors duration-200">View Recipe</a>
+                        <a href= "{% url 'recipes:recipe-detail' recipe_id=recipe.pk %}" class="inline-block bg-indigo-600 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-indigo-700 transition-colors duration-200">View Recipe</a>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,13 @@
 from django.urls import path
-from .views import HomeView
+from . import views
+from .views import ( RecipeListView,RecipeDetailView,CreateRecipeView,UpdateRecipeView,DeleteRecipeView)
+
+app_name = 'recipes' 
 
 urlpatterns = [
-    path("", HomeView.as_view(), name="home"),
+    path('', views.RecipeListView.as_view(), name='home'),
+    path('recipe/<int:recipe_id>/', views.RecipeDetailView.as_view(), name='recipe-detail'),
+    path('recipe/create/', views.CreateRecipeView.as_view(), name='recipe-create'),
+    path('recipe/<int:recipe_id>/update/', views.UpdateRecipeView.as_view(), name='recipe-update'),
+    path('recipe/<int:recipe_id>/delete/', views.DeleteRecipeView.as_view(), name='recipe-delete'),
 ]
