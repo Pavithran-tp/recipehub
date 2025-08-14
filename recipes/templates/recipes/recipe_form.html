@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if object %}
+        Edit {{ object.title }}
+    {% else %}
+        Create New Recipe
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 max-w-4xl mx-auto">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-8 text-center">
+            {% if object %}
+                Edit "{{ object.title }}"
+            {% else %}
+                Create a New Recipe
+            {% endif %}
+        </h1>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Oops! There's a problem:</strong>
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for field in form %}
+                    {% if field.name != 'instructions' %}
+                        <div>
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-1">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="md:col-span-2">
+                    <label for="{{ form.instructions.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-1">
+                        {{ form.instructions.label }}
+                    </label>
+                    <textarea
+                    id="{{ form.instructions.id_for_label }}"
+                    name="{{ form.instructions.name }}"
+                    rows="5"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                >{{ form.instructions.value|default:'' }}</textarea>
+                    {% for hidden in form.instructions.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {% for error in form.instructions.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr class="border-gray-300">
+            <h2 class="text-2xl font-bold text-gray-800">Ingredients</h2>
+            <div id="ingredient-formset-container" class="space-y-4">
+                {{ ingredient_formset.management_form }}
+                {% for form in ingredient_formset %}
+                    <div class="ingredient-form bg-gray-50 p-4 rounded-lg shadow-inner flex items-end justify-between gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 w-full">
+                            <div>
+                                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                    {{ form.name.label }}
+                                </label>
+                                {{ form.name }}
+                                {% for error in form.name.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <label for="{{ form.quantity.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                    {{ form.quantity.label }}
+                                </label>
+                                {{ form.quantity }}
+                                {% for error in form.quantity.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <label for="{{ form.unit.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                    {{ form.unit.label }}
+                                </label>
+                                {{ form.unit }}
+                                {% for error in form.unit.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <label for="{{ form.optional.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                    {{ form.optional }}
+                                    <span class="ml-2">{{ form.optional.label }}</span>
+                                </label>
+                                {% for error in form.optional.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        </div>
+                        {% if form.instance.pk %}
+                            <div>
+                                {{ form.DELETE }}
+                                <label for="{{ form.DELETE.id_for_label }}" class="text-sm font-medium text-red-600 cursor-pointer">
+                                    Remove
+                                </label>
+                            </div>
+                        {% else %}
+                            <button type="button" class="remove-ingredient-button text-sm font-medium text-red-600 cursor-pointer">
+                                Remove
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-ingredient-button" class="w-full bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                Add Ingredient
+            </button>
+
+            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save Recipe
+            </button>
+        </form>
+    </div>
+</div>
+
+{% include "scripts/ingredient_formset.html" %}
+
+{% endblock %}
