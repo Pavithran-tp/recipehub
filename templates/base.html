@@ -3,37 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecipeHub</title>
+    <title>{% block title %}RecipeHub{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% load static %}
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-green-700 text-white px-6 py-4 flex justify-between">
-        <a href="{% url 'home' %}" class="text-xl font-bold">RecipeHub</a>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-green-700 text-white shadow-lg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'recipes:home' %}" class="text-2xl font-bold">RecipeHub</a>
 
-        <div class="relative">
-            {% if user.is_authenticated %}
-                <button id="userMenuBtn" class="hover:underline">
-                    {{ user.username }}
-                </button>
-                <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden">
-                    <form method="post" action="{% url 'logout' %}" class="inline">
-                        {% csrf_token %}
-                        <button type="submit" class = "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Logout
+            <div class="flex items-center space-x-6">
+                <a href="{% url 'recipes:home' %}" class="hover:text-green-200 transition-colors duration-200">All Recipes</a>
+                {% if user.is_authenticated and user.is_chef %}
+                <a href="{% url 'recipes:recipe-create' %}" class="hover:text-green-200 transition-colors duration-200">Create Recipe</a>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <a href="#" class="hover:text-green-200 transition-colors duration-200">My Collections</a>
+                {% endif %}
+
+                <div class="relative">
+                    {% if user.is_authenticated %}
+                        <button id="userMenuBtn" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200 focus:outline-none">
+                            {{ user.username }}
                         </button>
-                    </form>
+                        <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-xl hidden z-50 overflow-hidden">
+                            <form method="post" action="{% url 'logout' %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200 mr-2">Login</a>
+                        <a href="{% url 'signup' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200">Sign Up</a>
+                    {% endif %}
                 </div>
-            {% else %}
-                <a href="{% url 'login' %}" class="hover:underline mr-4">Login</a>
-                <a href="{% url 'signup' %}" class="hover:underline">Sign Up</a>
-            {% endif %}
+            </div>
         </div>
     </nav>
-
-    <main class="container mx-auto mt-8">
-        {% block content %}{% endblock %}
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        {% block content %}
+        {% endblock %}
     </main>
+    <footer class="bg-white shadow-inner mt-8 p-4 text-center text-gray-500">
+        <p>&copy; 2025 RecipeHub. All rights reserved.</p>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -41,7 +64,8 @@
             const menu = document.getElementById("userMenu");
 
             if (btn) {
-                btn.addEventListener("click", () => {
+                btn.addEventListener("click", (event) => {
+                    event.stopPropagation(); 
                     menu.classList.toggle("hidden");
                 });
                 document.addEventListener("click", (event) => {
