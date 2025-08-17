@@ -74,7 +74,7 @@ class RecipeDetailView(DetailView):
         return get_object_or_404(Recipe, pk=self.kwargs.get('recipe_id'))
 
 
-class CreateRecipeView(CreateView):
+class CreateRecipeView(LoginRequiredMixin,CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = 'recipes/recipe_form.html'
