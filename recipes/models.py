@@ -134,7 +134,8 @@ class Ingredient(models.Model):
     )
 
     def __str__(self):
-        return f"{self.quantity} {self.get_unit_display() or self.custom_unit} {self.name}"
+        return f"{self.quantity:.2f} {self.get_unit_display()} {self.name}"
+
 
 
 class Collection(models.Model):
