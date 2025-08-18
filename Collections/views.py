@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from .models import Collection
 from recipes.models import Recipe
 from .forms import CollectionForm
-
+from django.db.models import Count
 
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
@@ -23,7 +23,7 @@ class CollectionListView(LoginRequiredMixin, ListView):
     context_object_name = 'collections'
 
     def get_queryset(self):
-        return Collection.objects.filter(user=self.request.user)
+        return Collection.objects.filter(user=self.request.user).annotate(recipes_count=Count('recipes'))
 
 
 class CollectionDetailView(LoginRequiredMixin, DetailView):
@@ -32,4 +32,4 @@ class CollectionDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'collection'
 
     def get_queryset(self):
-        return Collection.objects.filter(user=self.request.user)
+        return Collection.objects.filter(user=self.request.user).prefetch_related('recipes__author')
