@@ -30,3 +30,6 @@ class CollectionDetailView(LoginRequiredMixin, DetailView):
     model = Collection
     template_name = 'collections/collection_detail.html'
     context_object_name = 'collection'
+
+    def get_queryset(self):
+        return Collection.objects.filter(user=self.request.user)
