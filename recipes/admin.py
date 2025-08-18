@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe, Collection, Ingredient  
+from .models import Recipe,Ingredient  
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('title', 'cuisine', 'difficulty', 'veg_type', 'author', 'created_at')
@@ -10,12 +10,5 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'quantity', 'unit', 'optional', 'recipe')
     search_fields = ('name',)
 
-class CollectionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user')
-    search_fields = ('name', 'user__username')
-    filter_horizontal = ('recipes',)
-
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Collection, CollectionAdmin)
-
