@@ -30,6 +30,7 @@ class CollectionDetailView(LoginRequiredMixin, DetailView):
     model = Collection
     template_name = 'collections/collection_detail.html'
     context_object_name = 'collection'
+    pk_url_kwarg = 'collection_id'
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user).prefetch_related('recipes__author')

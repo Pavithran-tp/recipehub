@@ -16,9 +16,9 @@ class CollectionViewTests(TestCase):
         self.collection3 = Collection.objects.create(user=self.user2, name='User2 Collection')
 
         self.list_url = reverse('collections:collection-list')
-        self.detail_url_1 = reverse('collections:collection-detail', args=[self.collection1.pk])
-        self.detail_url_2 = reverse('collections:collection-detail', args=[self.collection2.pk])
-        self.detail_url_3 = reverse('collections:collection-detail', args=[self.collection3.pk])
+        self.detail_url_1 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection1.pk})
+        self.detail_url_2 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection2.pk})
+        self.detail_url_3 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection3.pk})
 
     def test_collection_list_view_redirects_unauthenticated_user(self):
         response = self.client.get(self.list_url)
