@@ -7,5 +7,3 @@ class CollectionAdmin(admin.ModelAdmin):
     filter_horizontal = ('recipes',)
 
 admin.site.register(Collection, CollectionAdmin)
-
-
