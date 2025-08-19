@@ -61,7 +61,10 @@ class RecipeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(self._get_recipe_filter_context(self.request))
+        if self.request.user.is_authenticated:
+            recipe = self.get_object()
+            context['collections'] = Collection.objects.filter(user=self.request.user)
+            context['collections_with_recipe_ids'] = set(recipe.collections.filter(user=self.request.user).values_list('pk', flat=True))
         return context
 
 
