@@ -19,6 +19,8 @@ class CollectionViewTests(TestCase):
         self.detail_url_1 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection1.pk})
         self.detail_url_2 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection2.pk})
         self.detail_url_3 = reverse('collections:collection-detail', kwargs={'collection_id': self.collection3.pk})
+        self.delete_url_1 = reverse('collections:collection-delete', kwargs={'collection_id': self.collection1.pk})
+
 
     def test_collection_list_view_redirects_unauthenticated_user(self):
         response = self.client.get(self.list_url)
@@ -57,3 +59,23 @@ class CollectionViewTests(TestCase):
         self.client.login(username='testuser1', password='testpassword123')
         response = self.client.get(self.detail_url_3)
         self.assertEqual(response.status_code, 404)
+
+    def test_collection_delete_view(self):
+        self.client.login(username='testuser1', password='testpassword123')
+        response = self.client.get(self.delete_url_1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'collections/collection_confirm_delete.html')
+
+    def test_collection_delete_success(self):
+        self.client.login(username='testuser1', password='testpassword123')
+        initial_count = Collection.objects.filter(user=self.user1).count()
+        response = self.client.post(self.delete_url_1)
+        self.assertRedirects(response, self.list_url)
+        self.assertEqual(Collection.objects.filter(user=self.user1).count(), initial_count - 1)
+        
+    def test_collection_delete_other_user_collection_fails(self):
+        self.client.login(username='testuser1', password='testpassword123')
+        initial_count = Collection.objects.filter(user=self.user2).count()
+        response = self.client.post(reverse('collections:collection-delete', kwargs={'collection_id': self.collection3.pk}))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Collection.objects.filter(user=self.user2).count(), initial_count)
