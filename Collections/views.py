@@ -7,6 +7,17 @@ from recipes.models import Recipe
 from .forms import CollectionForm
 from django.db.models import Count
 
+class CollectionRecipeMixin(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        self.collection_id = self.kwargs.get('collection_id')
+        self.recipe_id = self.kwargs.get('recipe_id')
+        self.collection = get_object_or_404(Collection, id=self.collection_id, user=request.user)
+        self.recipe = get_object_or_404(Recipe, id=self.recipe_id)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('collections:collection-detail', kwargs={'collection_id': self.collection_id})
+
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
@@ -47,18 +58,13 @@ class CollectionDeleteView(LoginRequiredMixin, DeleteView):
         return Collection.objects.filter(user=self.request.user)
 
 
-class AddToCollectionView(LoginRequiredMixin, View):
-    def post(self, request, collection_id, recipe_id, *args, **kwargs):
-        collection = get_object_or_404(Collection, id=collection_id, user=request.user)
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        collection.recipes.add(recipe)
-        return redirect('collections:collection-detail', collection_id=collection_id)
+class AddToCollectionView(CollectionRecipeMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.collection.recipes.add(self.recipe)
+        return redirect(self.get_success_url())
 
 
-class RemoveRecipeFromCollectionView(LoginRequiredMixin, View):
-    def post(self, request, collection_id, recipe_id, *args, **kwargs):
-        collection = get_object_or_404(Collection, id=collection_id, user=request.user)
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        collection.recipes.remove(recipe)
-        return redirect('collections:collection-detail', collection_id=collection_id)
-
+class RemoveRecipeFromCollectionView(CollectionRecipeMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.collection.recipes.remove(self.recipe)
+        return redirect(self.get_success_url())
