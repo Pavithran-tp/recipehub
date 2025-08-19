@@ -84,9 +84,12 @@
         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
             <span class="text-lg font-semibold text-gray-800">{{ collection.name }}</span>
             {% if recipe in collection.recipes.all %}
-            <button class="px-4 py-2 text-sm bg-green-500 text-white rounded-full font-semibold cursor-not-allowed opacity-75">
-                Added
-            </button>
+            <form action="{% url 'collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="px-4 py-2 text-sm bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors duration-200">
+                    Remove
+                </button>
+            </form>
             {% else %}
             <form action="{% url 'collections:add-recipe-to-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
@@ -103,5 +106,4 @@
     {% endif %}
 </div>
 {% endif %}
-
 {% endblock %}

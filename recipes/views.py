@@ -6,7 +6,7 @@ from django.db import transaction
 from django.forms import inlineformset_factory
 from .models import Recipe, Ingredient
 from .forms import RecipeForm, IngredientForm
-
+from Collections.models import Collection
 
 IngredientFormSet = inlineformset_factory(
     Recipe,
@@ -72,6 +72,13 @@ class RecipeDetailView(DetailView):
     
     def get_object(self):
         return get_object_or_404(Recipe, pk=self.kwargs.get('recipe_id'))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            from Collections.models import Collection
+            context['collections'] = Collection.objects.filter(user=self.request.user)
+        return context
 
 
 class CreateRecipeView(LoginRequiredMixin,CreateView):
