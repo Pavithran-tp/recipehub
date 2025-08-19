@@ -8,6 +8,7 @@ from .models import Recipe, Ingredient
 from .forms import RecipeForm, IngredientForm
 from Collections.models import Collection
 
+
 IngredientFormSet = inlineformset_factory(
     Recipe,
     Ingredient,
