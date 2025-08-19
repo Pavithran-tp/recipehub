@@ -21,6 +21,9 @@
                     {{ collection.recipes.count }} Recipe{{ collection.recipes.count|pluralize }}
                 </p>
             </a>
+            <a href="{% url 'collections:collection-delete' collection_id=collection.pk %}" class="mt-4 px-4 py-1 text-sm bg-red-500 text-white rounded-full font-semibold shadow-sm hover:bg-red-600 transition-colors duration-200">
+                Delete
+            </a>
         </div>
         {% endfor %}
     </div>
