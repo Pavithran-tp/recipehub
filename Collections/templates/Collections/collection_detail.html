@@ -15,7 +15,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for recipe in collection.recipes.all %}
         <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 relative">
-            <a href="{% url 'recipes:recipe-detail' recipe_id=recipe.pk %}" class="block">
+            <a href="{% url 'recipes:recipe-detail' pk=recipe.pk %}" class="block">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 relative">
+            <a href="{% url 'recipes:recipe-detail' pk=recipe.pk %}" class="block">
                 {% if recipe.image %}
                 <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
                 {% else %}
@@ -28,6 +30,14 @@
                     <p class="text-sm text-gray-500">By {{ recipe.author.username }}</p>
                 </div>
             </a>
+            <form action="{% url 'collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post" class="absolute top-2 right-2">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white rounded-full p-2 transition-colors duration-200 opacity-80 hover:opacity-100" title="Remove from Collection">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 112 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
         </div>
         {% endfor %}
     </div>
