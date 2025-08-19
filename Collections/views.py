@@ -7,7 +7,6 @@ from recipes.models import Recipe
 from .forms import CollectionForm
 from django.db.models import Count
 
-
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
