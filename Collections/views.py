@@ -1,4 +1,4 @@
-from django.views.generic import (CreateView,ListView,DetailView,DeleteView)
+from django.views.generic import (CreateView,ListView,DetailView,DeleteView,View,)
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -6,6 +6,17 @@ from .models import Collection
 from recipes.models import Recipe
 from .forms import CollectionForm
 from django.db.models import Count
+
+class CollectionRecipeMixin(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        self.collection_id = self.kwargs.get('collection_id')
+        self.recipe_id = self.kwargs.get('recipe_id')
+        self.collection = get_object_or_404(Collection, id=self.collection_id, user=request.user)
+        self.recipe = get_object_or_404(Recipe, id=self.recipe_id)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('collections:collection-detail', kwargs={'collection_id': self.collection_id})
 
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
@@ -45,3 +56,15 @@ class CollectionDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user)
+
+
+class AddToCollectionView(CollectionRecipeMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.collection.recipes.add(self.recipe)
+        return redirect(self.get_success_url())
+
+
+class RemoveRecipeFromCollectionView(CollectionRecipeMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.collection.recipes.remove(self.recipe)
+        return redirect(self.get_success_url())
