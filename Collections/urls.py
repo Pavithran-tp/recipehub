@@ -4,7 +4,6 @@ from .views import (CollectionListView, CreateCollectionView, CollectionDetailVi
 
 app_name = 'collections'
 
-
 urlpatterns = [
     path('', views.CollectionListView.as_view(), name='collection-list'),
     path('create/', views.CreateCollectionView.as_view(), name='collection-create'),
