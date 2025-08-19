@@ -1,43 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ collection.name }}{% endblock %}
+{% block title %}
+    {{ collection.title }}
+{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">{{ collection.name }}</h1>
-        <a href="{% url 'collections:collection-list' %}" class="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-full font-semibold hover:bg-gray-300 transition-colors duration-200">
-            &larr; Back to Collections
-        </a>
-    </div>
-
-    {% if collection.recipes.all %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {% for recipe in collection.recipes.all %}
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 relative">
-            <a href="{% url 'recipes:recipe-detail' pk=recipe.pk %}" class="block">
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 relative">
-            <a href="{% url 'recipes:recipe-detail' pk=recipe.pk %}" class="block">
-                {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
-                {% else %}
-                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-                    No Image
-                </div>
-                {% endif %}
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ recipe.title }}</h3>
-                    <p class="text-sm text-gray-500">By {{ recipe.author.username }}</p>
-                </div>
+    <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">{{ collection.title }}</h1>
+            <a href="{% url 'collections:collection-list' %}" class="text-indigo-600 hover:text-indigo-800 transition duration-300 ease-in-out">
+                &larr; Back to Collections
             </a>
         </div>
-        {% endfor %}
+
+        {% if collection.description %}
+            <p class="text-gray-600 mb-6">{{ collection.description }}</p>
+        {% else %}
+            <p class="text-gray-400 italic mb-6">No description provided for this collection.</p>
+        {% endif %}
+
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Recipes in this collection</h2>
+
+        {% if collection.recipes.all %}
+            <div class="space-y-4">
+                {% for recipe in collection.recipes.all %}
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-medium text-gray-900">
+                                <a href="{% url 'recipes:recipe-detail' recipe_id=recipe.id %}" class="hover:text-indigo-600 transition duration-300">
+                                    {{ recipe.title }}
+                                </a>
+                            </h3>
+                            <p class="text-sm text-gray-500">By {{ recipe.author }}</p>
+                        </div>
+                        <form action="{% url 'collections:remove-recipe-from-collection' collection_id=collection.id recipe_id=recipe.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 italic">This collection does not have any recipes yet.</p>
+        {% endif %}
+
     </div>
-    {% else %}
-    <div class="text-center p-12 bg-gray-50 rounded-lg shadow-inner mt-8">
-        <p class="text-lg text-gray-500 mb-4">There are no recipes in this collection yet.</p>
-        <p class="text-sm text-gray-500">You can start adding recipes from the all recipes page soon!</p>
-    </div>
-    {% endif %}
-</div>
 {% endblock %}

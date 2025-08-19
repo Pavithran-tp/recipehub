@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic import (CreateView, ListView, DetailView, DeleteView)
+from django.views.generic import (CreateView, ListView, DetailView, DeleteView, View,)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import Count
@@ -46,3 +46,20 @@ class CollectionDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user)
+
+
+class AddToCollectionView(LoginRequiredMixin, View):
+    def post(self, request, collection_id, recipe_id, *args, **kwargs):
+        collection = get_object_or_404(Collection, id=collection_id, user=request.user)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        collection.recipes.add(recipe)
+        return redirect('collections:collection-detail', collection_id=collection_id)
+
+
+class RemoveRecipeFromCollectionView(LoginRequiredMixin, View):
+    def post(self, request, collection_id, recipe_id, *args, **kwargs):
+        collection = get_object_or_404(Collection, id=collection_id, user=request.user)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        collection.recipes.remove(recipe)
+        return redirect('collections:collection-detail', collection_id=collection_id)
+
