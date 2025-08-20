@@ -95,7 +95,8 @@ class Recipe(models.Model):
         related_name='recipes',
         help_text="The user who created this recipe."
     )
-
+    featured = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.title
 
