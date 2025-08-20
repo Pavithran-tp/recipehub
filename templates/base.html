@@ -36,7 +36,7 @@
                             {{ user.username }}
                         </button>
                         <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-xl hidden z-50 overflow-hidden">
-                            <form method="post" action="{% url 'logout' %}" class="inline">
+                            <form method="post" action="{% url 'accounts:logout' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">
                                     Logout
@@ -44,8 +44,8 @@
                             </form>
                         </div>
                     {% else %}
-                        <a href="{% url 'login' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200 mr-2">Login</a>
-                        <a href="{% url 'signup' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200">Sign Up</a>
+                        <a href="{% url 'accounts:login' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200 mr-2">Login</a>
+                        <a href="{% url 'accounts:signup' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200">Sign Up</a>
                     {% endif %}
                 </div>
             </div>
