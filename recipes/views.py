@@ -166,4 +166,4 @@ class FeaturedRecipeView(ListView):
     context_object_name = 'featured_recipes'
 
     def get_queryset(self):
-        return Recipe.objects.filter(featured=True)
+        return Recipe.objects.filter(featured=True).order_by('-updated_at')
