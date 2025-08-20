@@ -4,8 +4,6 @@ from .views import SignUpView, CustomLoginView, CustomPasswordChangeView, Custom
 
 app_name = "accounts"
 
-app_name = "accounts"
-
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'), 
     path('login/', CustomLoginView.as_view(), name='login'),
