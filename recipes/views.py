@@ -160,3 +160,10 @@ class DeleteRecipeView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         recipe = self.get_object()
         return self.request.user == recipe.author
+
+class FeaturedRecipeView(ListView):
+    template_name = 'recipes/featured_recipes.html'
+    context_object_name = 'featured_recipes'
+
+    def get_queryset(self):
+        return Recipe.objects.filter(featured=True)
