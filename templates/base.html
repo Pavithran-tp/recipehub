@@ -36,6 +36,9 @@
                             {{ user.username }}
                         </button>
                         <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-xl hidden z-50 overflow-hidden">
+                            <a href="{% url 'accounts:password_change' %}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">
+                                Change Password
+                            </a>
                             <form method="post" action="{% url 'accounts:logout' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">
