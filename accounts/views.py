@@ -20,5 +20,3 @@ class CustomPasswordChangeView(auth_views.PasswordChangeView):
 
 class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'accounts/password_change_done.html'
-
-
