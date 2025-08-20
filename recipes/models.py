@@ -95,7 +95,9 @@ class Recipe(models.Model):
         related_name='recipes',
         help_text="The user who created this recipe."
     )
+    
     featured = models.BooleanField(default=False, help_text="Mark this recipe as featured to highlight it.")
+
     def __str__(self):
         return self.title
 
