@@ -2,10 +2,9 @@ from django.contrib import admin
 from .models import Recipe,Ingredient  
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'cuisine', 'difficulty', 'veg_type', 'author', 'created_at', 'featured')
-    list_editable = ('featured',)
+    list_display = ('title', 'cuisine', 'difficulty', 'veg_type', 'author', 'created_at')
     search_fields = ('title', 'description')
-    list_filter = ('cuisine', 'difficulty', 'veg_type', 'featured')
+    list_filter = ('cuisine', 'difficulty', 'veg_type')
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'quantity', 'unit', 'optional', 'recipe')
