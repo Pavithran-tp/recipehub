@@ -164,6 +164,7 @@ class DeleteRecipeView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class FeaturedRecipeView(ListView):
     template_name = 'recipes/featured_recipes.html'
     context_object_name = 'featured_recipes'
+    paginate_by = 9
 
     def get_queryset(self):
         return Recipe.objects.filter(featured=True).order_by('-updated_at')
