@@ -37,5 +37,18 @@
             Login
         </button>
     </form>
+    <div class="text-center text-sm mt-4 space-y-2">
+        <p>
+            <a href="{% url 'password_reset' %}" class="text-green-700 hover:underline font-semibold">
+                Forgot your password?
+            </a>
+        </p>
+        <p>
+            Don't have an account? 
+            <a href="{% url 'accounts:signup' %}" class="text-green-700 hover:underline font-semibold">
+                Register here
+            </a>
+        </p>
+    </div>
 </div>
 {% endblock %}
