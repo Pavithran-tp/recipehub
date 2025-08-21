@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Featured Recipes</h1>
+    {% if featured_recipes %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for recipe in featured_recipes %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-xl font-semibold text-gray-800">{{ recipe.title }}</h2>
+                    <p class="mt-2 text-gray-600">{{ recipe.instructions|truncatewords:20 }}</p>
+                    <a href="{% url 'recipes:recipe-detail' recipe.id %}" class="mt-4 inline-block text-green-600 hover:text-green-800 font-semibold transition duration-200">
+                        View Recipe
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-500">No featured recipes to display at the moment.</p>
+    {% endif %}
+</div>
+{% endblock %}
