@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'recipes',
     'accounts',
-    'Collections',
+    'recipe_collections',
     'widget_tweaks',
 ]
 

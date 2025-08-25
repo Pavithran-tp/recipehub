@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from .views import (CollectionListView, CreateCollectionView, CollectionDetailView, CollectionDeleteView, AddToCollectionView, RemoveRecipeFromCollectionView,)
 
-app_name = 'collections'
+app_name = 'recipe_collections'
 
 urlpatterns = [
     path('', views.CollectionListView.as_view(), name='collection-list'),
