@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %}My Collections{% endblock %}
+{% block title %}My recipe_collections{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">My Collections</h1>
-        <a href="{% url 'collections:collection-create' %}" class="px-6 py-2 bg-green-700 text-white rounded-full font-semibold shadow-md hover:bg-green-800 transition-colors duration-200">
+        <h1 class="text-3xl font-bold text-gray-800">My recipe_collections</h1>
+        <a href="{% url 'recipe_collections:collection-create' %}" class="px-6 py-2 bg-green-700 text-white rounded-full font-semibold shadow-md hover:bg-green-800 transition-colors duration-200">
             Create New Collection
         </a>
     </div>
 
-    {% if collections %}
+    {% if recipe_collections %}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {% for collection in collections %}
+        {% for collection in recipe_collections %}
         <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-            <a href="{% url 'collections:collection-detail' collection_id=collection.pk %}" class="block w-full">
+            <a href="{% url 'recipe_collections:collection-detail' collection_id=collection.pk %}" class="block w-full">
                 <h2 class="text-xl font-bold text-gray-800 hover:text-green-700 transition-colors duration-200 mb-2">{{ collection.name }}</h2>
                 <p class="text-gray-500 text-sm">
                     {{ collection.recipes.count }} Recipe{{ collection.recipes.count|pluralize }}
                 </p>
             </a>
-            <a href="{% url 'collections:collection-delete' collection_id=collection.pk %}" class="mt-4 px-4 py-1 text-sm bg-red-500 text-white rounded-full font-semibold shadow-sm hover:bg-red-600 transition-colors duration-200">
+            <a href="{% url 'recipe_collections:collection-delete' collection_id=collection.pk %}" class="mt-4 px-4 py-1 text-sm bg-red-500 text-white rounded-full font-semibold shadow-sm hover:bg-red-600 transition-colors duration-200">
                 Delete
             </a>
         </div>
@@ -29,8 +29,8 @@
     </div>
     {% else %}
     <div class="text-center p-12 bg-gray-50 rounded-lg shadow-inner mt-8">
-        <p class="text-lg text-gray-500 mb-4">You don't have any collections yet.</p>
-        <a href="{% url 'collections:collection-create' %}" class="px-6 py-3 bg-green-700 text-white rounded-full font-semibold shadow-md hover:bg-green-800 transition-colors duration-200">
+        <p class="text-lg text-gray-500 mb-4">You don't have any recipe_collections yet.</p>
+        <a href="{% url 'recipe_collections:collection-create' %}" class="px-6 py-3 bg-green-700 text-white rounded-full font-semibold shadow-md hover:bg-green-800 transition-colors duration-200">
             Create Your First Collection
         </a>
     </div>

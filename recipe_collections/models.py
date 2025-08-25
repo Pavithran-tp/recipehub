@@ -14,12 +14,12 @@ class Collection(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='collections',
+        related_name='recipe_collections',
         help_text="The user who owns this collection."
     )
     recipes = models.ManyToManyField(
         Recipe,
-        related_name='collections',
+        related_name='recipe_collections',
         help_text="Recipes included in this collection."
     )
 

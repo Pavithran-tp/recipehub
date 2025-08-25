@@ -79,20 +79,20 @@
 {% if user.is_authenticated %}
 <div class="bg-white rounded-xl shadow-lg p-8 mt-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-4">Add to Collection</h2>
-    {% if collections %}
+    {% if recipe_collections %}
     <div class="space-y-4">
-        {% for collection in collections %}
+        {% for collection in recipe_collections %}
         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
             <span class="text-lg font-semibold text-gray-800">{{ collection.name }}</span>
-            {% if collection.pk in collections_with_recipe_ids %}
-            <form action="{% url 'collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
+            {% if collection.pk in recipe_collections_with_recipe_ids %}
+            <form action="{% url 'recipe_collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 text-sm bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors duration-200">
                     Remove
                 </button>
             </form>
             {% else %}
-            <form action="{% url 'collections:add-recipe-to-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
+            <form action="{% url 'recipe_collections:add-recipe-to-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 transition-colors duration-200">
                     Add
@@ -103,7 +103,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <p class="text-gray-500">You don't have any collections yet. <a href="{% url 'collections:collection-create' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Create one!</a></p>
+    <p class="text-gray-500">You don't have any recipe_collections yet. <a href="{% url 'recipe_collections:collection-create' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Create one!</a></p>
     {% endif %}
 </div>
 {% endif %}

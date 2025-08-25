@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Name of the collection.', max_length=100)),
-                ('recipes', models.ManyToManyField(help_text='Recipes included in this collection.', related_name='collections', to='recipes.recipe')),
-                ('user', models.ForeignKey(help_text='The user who owns this collection.', on_delete=django.db.models.deletion.CASCADE, related_name='collections', to=settings.AUTH_USER_MODEL)),
+                ('recipes', models.ManyToManyField(help_text='Recipes included in this collection.', related_name='recipe_collections', to='recipes.recipe')),
+                ('user', models.ForeignKey(help_text='The user who owns this collection.', on_delete=django.db.models.deletion.CASCADE, related_name='recipe_collections', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

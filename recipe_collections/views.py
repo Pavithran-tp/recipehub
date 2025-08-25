@@ -16,13 +16,13 @@ class CollectionRecipeMixin(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy('collections:collection-detail', kwargs={'collection_id': self.collection_id})
+        return reverse_lazy('recipe_collections:collection-detail', kwargs={'collection_id': self.collection_id})
 
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
-    template_name = 'collections/collection_form.html'
-    success_url = reverse_lazy('collections:collection-list')
+    template_name = 'recipe_collections/collection_form.html'
+    success_url = reverse_lazy('recipe_collections:collection-list')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -31,8 +31,8 @@ class CreateCollectionView(LoginRequiredMixin, CreateView):
 
 class CollectionListView(LoginRequiredMixin, ListView):
     model = Collection
-    template_name = 'collections/collection_list.html'
-    context_object_name = 'collections'
+    template_name = 'recipe_collections/collection_list.html'
+    context_object_name = 'recipe_collections'
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user).annotate(recipes_count=Count('recipes'))
@@ -40,7 +40,7 @@ class CollectionListView(LoginRequiredMixin, ListView):
 
 class CollectionDetailView(LoginRequiredMixin, DetailView):
     model = Collection
-    template_name = 'collections/collection_detail.html'
+    template_name = 'recipe_collections/collection_detail.html'
     context_object_name = 'collection'
     pk_url_kwarg = 'collection_id'
 
@@ -50,9 +50,9 @@ class CollectionDetailView(LoginRequiredMixin, DetailView):
 
 class CollectionDeleteView(LoginRequiredMixin, DeleteView):
     model = Collection
-    template_name = 'collections/collection_confirm_delete.html'
+    template_name = 'recipe_collections/collection_confirm_delete.html'
     pk_url_kwarg = 'collection_id'
-    success_url = reverse_lazy('collections:collection-list')
+    success_url = reverse_lazy('recipe_collections:collection-list')
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user)

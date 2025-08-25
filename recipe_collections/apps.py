@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CollectionsConfig(AppConfig):
+class recipe_collectionsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Collections'
+    name = 'recipe_collections'
