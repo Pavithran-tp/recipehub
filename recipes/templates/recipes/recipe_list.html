@@ -64,4 +64,45 @@
             <div class="col-span-full text-center text-gray-500">No recipes found.</div>
         {% endfor %}
     </div>
+
+    {% comment %}
+        Pagination controls
+    {% endcomment %}
+    {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-8">
+            <ul class="pagination flex justify-center space-x-2">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link py-2 px-4 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">Previous</span>
+                    </li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link py-2 px-4 border border-indigo-600 rounded-md bg-indigo-600 text-white">{{ i }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link py-2 px-4 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">Next</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}
