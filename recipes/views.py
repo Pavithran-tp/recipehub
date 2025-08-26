@@ -110,7 +110,6 @@ class CreateRecipeView(LoginRequiredMixin,CreateView):
             else:
                 return self.render_to_response(self.get_context_data(form=form))
 
-
 class UpdateRecipeView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
@@ -145,7 +144,6 @@ class UpdateRecipeView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         recipe = self.get_object()
         return self.request.user == recipe.author
-
 
 class DeleteRecipeView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
