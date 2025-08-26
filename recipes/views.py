@@ -13,8 +13,7 @@ IngredientFormSet = inlineformset_factory(
     Recipe,
     Ingredient,
     form=IngredientForm,
-    fields=('name', 'quantity', 'unit'),
-    extra=1,
+    fields=('name', 'quantity', 'unit', 'optional'),
     can_delete=True
 )
 
@@ -105,7 +104,6 @@ class CreateRecipeView(LoginRequiredMixin,CreateView):
                 self.object = form.save(commit=False)
                 self.object.author = self.request.user
                 self.object.save()
-                ingredient_formset.instance = self.object
                 ingredient_formset.save()
                 return super().form_valid(form)
             else:
