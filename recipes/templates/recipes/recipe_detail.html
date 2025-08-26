@@ -84,7 +84,7 @@
         {% for collection in recipe_collections %}
         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
             <span class="text-lg font-semibold text-gray-800">{{ collection.name }}</span>
-            {% if collection.pk in recipe_collections_with_recipe_ids %}
+            {% if collection.pk in recipe_in_collections_ids %}
             <form action="{% url 'recipe_collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 text-sm bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors duration-200">
