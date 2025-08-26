@@ -77,7 +77,12 @@ class RecipeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             from recipe_collections.models import Collection
-            context['recipe_collections'] = Collection.objects.filter(user=self.request.user)
+            user_collections = Collection.objects.filter(user=self.request.user)
+            context['recipe_collections'] = user_collections
+            recipe_in_collections = user_collections.filter(recipes=self.object)
+            context['recipe_in_collections_ids'] = [
+                collection.id for collection in recipe_in_collections
+            ]
         return context
 
 
