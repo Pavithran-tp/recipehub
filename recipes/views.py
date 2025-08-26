@@ -104,6 +104,7 @@ class CreateRecipeView(LoginRequiredMixin,CreateView):
                 self.object = form.save(commit=False)
                 self.object.author = self.request.user
                 self.object.save()
+                ingredient_formset.instance = self.object
                 ingredient_formset.save()
                 return super().form_valid(form)
             else:
