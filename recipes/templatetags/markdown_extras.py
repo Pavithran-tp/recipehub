@@ -1,8 +1,10 @@
 import markdown
+import bleach
 from django import template
 
 register = template.Library()
 
 @register.filter
 def markdownify(text):
-    return markdown.markdown(text, extensions=["fenced_code", "tables"])
+    html = markdown.markdown(text, extensions=["fenced_code", "tables"])
+    return bleach.clean(html)
