@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'recipes',
     'accounts',
     'recipe_collections',
-    'markdown_deux',
     'widget_tweaks',
 ]
 
