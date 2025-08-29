@@ -47,7 +47,7 @@
                         {{ form.instructions.label }}
                     </label>
                     <textarea
-                    id="{{ form.instructions.id_for_label }}"
+                    id="instructions"
                     name="{{ form.instructions.name }}"
                     rows="5"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
@@ -134,5 +134,17 @@
 </div>
 
 {% include "scripts/ingredient_formset.html" %}
+
+<script>
+    var simplemde = new SimpleMDE({
+        element: document.getElementById("instructions"),
+        spellChecker: false,
+        forceSync: true,
+        previewRender: function(plainText) {
+            var html = SimpleMDE.prototype.markdown(plainText);
+            return "<div class='markdown-body'>" + html + "</div>";
+        }
+    });
+</script>
 
 {% endblock %}
