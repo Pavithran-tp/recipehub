@@ -14,7 +14,8 @@ IngredientFormSet = inlineformset_factory(
     Ingredient,
     form=IngredientForm,
     fields=('name', 'quantity', 'unit', 'optional'),
-    can_delete=True
+    can_delete=True,
+    extra=1
 )
 
 class RecipeListView(ListView):
