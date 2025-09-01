@@ -68,7 +68,7 @@ class AddToCollectionView(CollectionRecipeMixin, View):
 class RemoveRecipeFromCollectionView(CollectionRecipeMixin, View):
     def post(self, request, *args, **kwargs):
         self.collection.recipes.remove(self.recipe)
-        if 'recipe_collections' in request.META.get('HTTP_REFERER', ''):
-            return redirect('recipe_collections:collection-detail', collection_id=self.collection.pk)
-        else:
+        if request.content_type == 'application/json':
             return JsonResponse({'status': 'success', 'message': 'Recipe removed from collection.'})
+        else:
+            return redirect(self.get_success_url())
