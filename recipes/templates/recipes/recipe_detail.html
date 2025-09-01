@@ -117,7 +117,7 @@
 
         removeForms.forEach(form => {
             form.addEventListener('submit', async (e) => {
-                e.preventDefault(); // This is the key: it stops the page from reloading.
+                e.preventDefault();
 
                 const url = form.action;
                 const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -134,10 +134,8 @@
                     });
 
                     if (response.ok) {
-                        // Success: The recipe was removed.
-                        // Now, replace the 'Remove' form with the 'Add' form.
                         const collectionId = formContainer.dataset.collectionId;
-                        const recipeId = '{{ recipe.pk }}'; // Get the recipe ID from Django context
+                        const recipeId = '{{ recipe.pk }}';
                         const addUrl = `{% url 'recipe_collections:add-recipe-to-collection' collection_id=0 recipe_id=0 %}`
                                        .replace('0', collectionId)
                                        .replace('0', recipeId);
@@ -153,12 +151,10 @@
                         form.outerHTML = addFormHTML;
 
                     } else {
-                        // Handle server errors
                         const errorData = await response.json();
                         alert('Error: ' + (errorData.message || 'Failed to remove recipe.'));
                     }
                 } catch (error) {
-                    // Handle network or other errors
                     console.error('Network Error:', error);
                     alert('An error occurred. Please check your internet connection and try again.');
                 }
