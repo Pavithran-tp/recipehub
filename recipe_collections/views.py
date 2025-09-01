@@ -6,6 +6,7 @@ from .models import Collection
 from recipes.models import Recipe
 from .forms import CollectionForm
 from django.db.models import Count
+from django.http import JsonResponse
 
 class CollectionRecipeMixin(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
@@ -67,4 +68,7 @@ class AddToCollectionView(CollectionRecipeMixin, View):
 class RemoveRecipeFromCollectionView(CollectionRecipeMixin, View):
     def post(self, request, *args, **kwargs):
         self.collection.recipes.remove(self.recipe)
-        return redirect(self.get_success_url())
+        if request.content_type == 'application/json':
+            return JsonResponse({'status': 'success', 'message': 'Recipe removed from collection.'})
+        else:
+            return redirect(self.get_success_url())

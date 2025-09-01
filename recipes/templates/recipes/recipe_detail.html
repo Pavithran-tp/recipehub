@@ -83,17 +83,17 @@
     {% if recipe_collections %}
     <div class="space-y-4">
         {% for collection in recipe_collections %}
-        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm" data-collection-id="{{ collection.pk }}">
             <span class="text-lg font-semibold text-gray-800">{{ collection.name }}</span>
             {% if collection.pk in recipe_in_collections_ids %}
-            <form action="{% url 'recipe_collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
+            <form class="remove-recipe-form" action="{% url 'recipe_collections:remove-recipe-from-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 text-sm bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors duration-200">
                     Remove
                 </button>
             </form>
             {% else %}
-            <form action="{% url 'recipe_collections:add-recipe-to-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
+            <form class="add-recipe-form" action="{% url 'recipe_collections:add-recipe-to-collection' collection_id=collection.pk recipe_id=recipe.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 transition-colors duration-200">
                     Add
@@ -108,4 +108,58 @@
     {% endif %}
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const removeForms = document.querySelectorAll('.remove-recipe-form');
+
+        removeForms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const url = form.action;
+                const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+                const formContainer = form.closest('[data-collection-id]');
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({})
+                    });
+
+                    if (response.ok) {
+                        const collectionId = formContainer.dataset.collectionId;
+                        const recipeId = '{{ recipe.pk }}';
+                        const addUrl = `{% url 'recipe_collections:add-recipe-to-collection' collection_id=0 recipe_id=0 %}`
+                                       .replace('0', collectionId)
+                                       .replace('0', recipeId);
+
+                        const addFormHTML = `
+                            <form class="add-recipe-form" action="${addUrl}" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                                <button type="submit" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 transition-colors duration-200">
+                                    Add
+                                </button>
+                            </form>
+                        `;
+                        form.outerHTML = addFormHTML;
+
+                    } else {
+                        const errorData = await response.json();
+                        alert('Error: ' + (errorData.message || 'Failed to remove recipe.'));
+                    }
+                } catch (error) {
+                    console.error('Network Error:', error);
+                    alert('An error occurred. Please check your internet connection and try again.');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
