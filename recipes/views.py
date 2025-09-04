@@ -7,6 +7,10 @@ from django.forms import inlineformset_factory
 from .models import Recipe, Ingredient
 from .forms import RecipeForm, IngredientForm
 from recipe_collections.models import Collection
+import json
+from django.http import JsonResponse
+from django.views import View
+from django.utils import timezone
 
 
 IngredientFormSet = inlineformset_factory(
@@ -168,3 +172,17 @@ class FeaturedRecipeView(ListView):
 
     def get_queryset(self):
         return Recipe.objects.filter(featured=True).order_by('-updated_at')
+
+class SetTimezoneView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            user_timezone = data.get('timezone')
+            if user_timezone:
+                request.session['django_timezone'] = user_timezone
+                timezone.activate(user_timezone)
+                return JsonResponse({'status': 'ok'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'No timezone provided'}, status=400)
+        except (json.JSONDecodeError, timezone.UnknownTimeZoneError):
+            return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)

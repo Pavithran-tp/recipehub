@@ -38,7 +38,12 @@
             margin-left: 1.5rem;
             margin-bottom: 0.75rem;
         }
-     
+        #timezone-select option,
+        #timezone-select optgroup {
+            background-color: white;
+            color: black;
+        }
+        
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -78,6 +83,43 @@
                         <a href="{% url 'accounts:signup' %}" class="bg-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-800 transition-colors duration-200">Sign Up</a>
                     {% endif %}
                 </div>
+                <div class="flex items-center space-x-2">
+                    <label for="timezone-select" class="text-sm font-medium hidden md:block">Timezone:</label>
+                    <select id="timezone-select" class="p-2 rounded-md text-white text-sm bg-green-800 border border-green-600 shadow-sm">
+                        <option value="" {% if not request.session.django_timezone %}selected{% endif %}>Auto</option>
+                        <optgroup label="Africa">
+                            <option value="Africa/Cairo" {% if request.session.django_timezone == 'Africa/Cairo' %}selected{% endif %}>Cairo</option>
+                            <option value="Africa/Johannesburg" {% if request.session.django_timezone == 'Africa/Johannesburg' %}selected{% endif %}>Johannesburg</option>
+                            <option value="Africa/Nairobi" {% if request.session.django_timezone == 'Africa/Nairobi' %}selected{% endif %}>Nairobi</option>
+                        </optgroup>
+                        <optgroup label="America">
+                            <option value="America/New_York" {% if request.session.django_timezone == 'America/New_York' %}selected{% endif %}>New York</option>
+                            <option value="America/Chicago" {% if request.session.django_timezone == 'America/Chicago' %}selected{% endif %}>Chicago</option>
+                            <option value="America/Denver" {% if request.session.django_timezone == 'America/Denver' %}selected{% endif %}>Denver</option>
+                            <option value="America/Los_Angeles" {% if request.session.django_timezone == 'America/Los_Angeles' %}selected{% endif %}>Los Angeles</option>
+                            <option value="America/Vancouver" {% if request.session.django_timezone == 'America/Vancouver' %}selected{% endif %}>Vancouver</option>
+                            <option value="America/Sao_Paulo" {% if request.session.django_timezone == 'America/Sao_Paulo' %}selected{% endif %}>Sao Paulo</option>
+                        </optgroup>
+                        <optgroup label="Asia">
+                            <option value="Asia/Dubai" {% if request.session.django_timezone == 'Asia/Dubai' %}selected{% endif %}>Dubai</option>
+                            <option value="Asia/Kolkata" {% if request.session.django_timezone == 'Asia/Kolkata' %}selected{% endif %}>Kolkata</option>
+                            <option value="Asia/Shanghai" {% if request.session.django_timezone == 'Asia/Shanghai' %}selected{% endif %}>Shanghai</option>
+                            <option value="Asia/Singapore" {% if request.session.django_timezone == 'Asia/Singapore' %}selected{% endif %}>Singapore</option>
+                            <option value="Asia/Tokyo" {% if request.session.django_timezone == 'Asia/Tokyo' %}selected{% endif %}>Tokyo</option>
+                        </optgroup>
+                        <optgroup label="Australia">
+                            <option value="Australia/Sydney" {% if request.session.django_timezone == 'Australia/Sydney' %}selected{% endif %}>Sydney</option>
+                            <option value="Australia/Melbourne" {% if request.session.django_timezone == 'Australia/Melbourne' %}selected{% endif %}>Melbourne</option>
+                            <option value="Australia/Perth" {% if request.session.django_timezone == 'Australia/Perth' %}selected{% endif %}>Perth</option>
+                        </optgroup>
+                        <optgroup label="Europe">
+                            <option value="Europe/London" {% if request.session.django_timezone == 'Europe/London' %}selected{% endif %}>London</option>
+                            <option value="Europe/Paris" {% if request.session.django_timezone == 'Europe/Paris' %}selected{% endif %}>Paris</option>
+                            <option value="Europe/Berlin" {% if request.session.django_timezone == 'Europe/Berlin' %}selected{% endif %}>Berlin</option>
+                            <option value="Europe/Moscow" {% if request.session.django_timezone == 'Europe/Moscow' %}selected{% endif %}>Moscow</option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
         </div>
     </nav>
@@ -103,6 +145,53 @@
                     if (!btn.contains(event.target) && !menu.contains(event.target)) {
                         menu.classList.add("hidden");
                     }
+                });
+            }
+        });
+    </script>
+    
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const timezoneSelect = document.getElementById('timezone-select');
+            if (timezoneSelect) {
+                timezoneSelect.addEventListener('change', (event) => {
+                    const selectedTimezone = event.target.value || Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    const csrfToken = getCookie('csrftoken');
+
+                    fetch('{% url "recipes:set_timezone" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ 'timezone': selectedTimezone })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            console.error('Failed to set timezone.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Network error:', error);
+                    });
                 });
             }
         });

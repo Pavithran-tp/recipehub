@@ -55,6 +55,7 @@
                     <h5 class="text-xl font-semibold text-gray-800 mb-2">{{ recipe.title }}</h5>
                     <p class="text-sm text-gray-600">By {{ recipe.author.username }}</p>
                     <p class="text-sm text-gray-500 mt-1">Difficulty: <span class="font-medium text-gray-700">{{ recipe.get_difficulty_display }}</span></p>
+                    <p class="text-sm text-gray-500 mt-1">Created: <span class="font-medium text-gray-700">{{ recipe.created_at|date:"P, j F Y" }}</span></p>
                     <div class="mt-4">
                         <a href= "{% url 'recipes:recipe-detail' recipe_id=recipe.pk %}" class="inline-block bg-indigo-600 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-indigo-700 transition-colors duration-200">View Recipe</a>
                     </div>
