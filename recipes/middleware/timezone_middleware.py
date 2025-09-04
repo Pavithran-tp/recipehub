@@ -11,7 +11,6 @@ class CustomTimezoneMiddleware:
             try:
                 timezone.activate(user_timezone)
             except timezone.UnknownTimeZoneError:
-                # Fallback to default if the saved timezone is invalid
                 timezone.deactivate()
         else:
             timezone.deactivate()
