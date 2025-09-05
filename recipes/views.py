@@ -11,7 +11,7 @@ import json
 from django.http import JsonResponse
 from django.views import View
 from django.utils import timezone
-
+import pytz
 
 IngredientFormSet = inlineformset_factory(
     Recipe,
@@ -67,8 +67,9 @@ class RecipeListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self._get_recipe_filter_context(self.request))
+        # Add all available timezones to the context
+        context['timezones'] = pytz.all_timezones
         return context
-
 
 class RecipeDetailView(DetailView):
     model = Recipe
@@ -85,7 +86,6 @@ class RecipeDetailView(DetailView):
             context['recipe_collections'] = user_collections
             context['recipe_in_collections_ids'] = set(user_collections.filter(recipes=self.object).values_list('id', flat=True))
         return context
-
 
 class CreateRecipeView(LoginRequiredMixin,CreateView):
     model = Recipe
@@ -115,7 +115,6 @@ class CreateRecipeView(LoginRequiredMixin,CreateView):
                 return super().form_valid(form)
             else:
                 return self.render_to_response(self.get_context_data(form=form))
-
 
 class UpdateRecipeView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
@@ -152,7 +151,6 @@ class UpdateRecipeView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         recipe = self.get_object()
         return self.request.user == recipe.author
 
-
 class DeleteRecipeView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
     template_name = 'recipes/recipe_confirm_delete.html'
@@ -178,8 +176,15 @@ class SetTimezoneView(View):
         try:
             data = json.loads(request.body)
             user_timezone = data.get('timezone')
+
             if user_timezone:
-                request.session['django_timezone'] = user_timezone
+                if request.user.is_authenticated:
+                    request.user.timezone = user_timezone
+                    request.user.save()
+                    request.session['django_timezone'] = user_timezone
+                else:
+                    request.session['django_timezone'] = user_timezone
+                
                 timezone.activate(user_timezone)
                 return JsonResponse({'status': 'ok'})
             else:
