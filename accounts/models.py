@@ -11,6 +11,9 @@ class User(AbstractUser):
         default=False,
         help_text="Check if the user is a chef."
     )
+
+    timezone = models.CharField(max_length=50, default='UTC', blank=True)
+    
     bio = models.TextField(
         blank=True,
         null=True,
